@@ -3,6 +3,8 @@ package com.sankuai.inf.leaf.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -11,7 +13,14 @@ public class PropertyFactory {
     private static final Properties prop = new Properties();
     static {
         try {
-            prop.load(PropertyFactory.class.getClassLoader().getResourceAsStream("leaf.properties"));
+            File configFile = new File("./config/", "leaf.properties");
+            if (configFile.exists()){
+                try (FileInputStream fileInputStream = new FileInputStream(configFile)) {
+                    prop.load(fileInputStream);
+                }
+            }else {
+                prop.load(PropertyFactory.class.getClassLoader().getResourceAsStream("leaf.properties"));
+            }
         } catch (IOException e) {
             logger.warn("Load Properties Ex", e);
         }
